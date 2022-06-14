@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		31510AAA2858CB53008C2274 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31510AA92858CB53008C2274 /* WelcomeView.swift */; };
 		31510AAC2858CB66008C2274 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31510AAB2858CB66008C2274 /* ExerciseView.swift */; };
+		31510AAF2858F774008C2274 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31510AAE2858F774008C2274 /* HeaderView.swift */; };
 		CD30C924251474DC0049DB93 /* HIITFitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30C923251474DC0049DB93 /* HIITFitApp.swift */; };
 		CD30C926251474DC0049DB93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30C925251474DC0049DB93 /* ContentView.swift */; };
 		CD30C928251474DD0049DB93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD30C927251474DD0049DB93 /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		31510AA92858CB53008C2274 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		31510AAB2858CB66008C2274 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
+		31510AAE2858F774008C2274 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		CD30C920251474DC0049DB93 /* HIITFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HIITFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD30C923251474DC0049DB93 /* HIITFitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIITFitApp.swift; sourceTree = "<group>"; };
 		CD30C925251474DC0049DB93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,6 +57,7 @@
 				CD30C925251474DC0049DB93 /* ContentView.swift */,
 				31510AA92858CB53008C2274 /* WelcomeView.swift */,
 				31510AAB2858CB66008C2274 /* ExerciseView.swift */,
+				31510AAE2858F774008C2274 /* HeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				CD30C93F25147A8C0049DB93 /* DateExtension.swift in Sources */,
 				CD30C924251474DC0049DB93 /* HIITFitApp.swift in Sources */,
 				CD30C94025147A8C0049DB93 /* ImageExtension.swift in Sources */,
+				31510AAF2858F774008C2274 /* HeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
