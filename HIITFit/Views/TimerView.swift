@@ -32,51 +32,31 @@
 
 import SwiftUI
 
-struct WelcomeView: View {
-    @State private var showHistory = false
-    @Binding var selectedTab: Int
+struct TimerView: View {
+    @State private var timeRemaining = 3
+    @Binding var timerDone: Bool
+    let timer = Timer.publish(
+        every: 1,
+        on: .main,
+        in: .common)
+        .autoconnect()
     var body: some View {
-        ZStack {
-            VStack {
-                HStack(alignment: .bottom) {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("Get Fit", comment: "invitation to exercise"))
-                            .font(.largeTitle)
-                        Text("with high intensity interval training")
-                            .font(.headline)
-                    }
-                    Image("step-up")
-                        .resizedToFill(width: 240, height: 240)
-                        .clipShape(Circle())
+        Text("\(timeRemaining)")
+            .font(.system(size: 90, design: .rounded))
+            .padding()
+            .onReceive(timer) { _ in
+                if self.timeRemaining > 0 {
+                    self.timeRemaining -= 1
+                } else {
+                    timerDone = true
                 }
-                Button(action: { selectedTab = 0 }) {
-                    Text(NSLocalizedString("Get Started", comment: "invitation"))
-                    Image(systemName: "arrow.right.circle")
-                }
-                .font(.title2)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 2)
-                    )
             }
-            VStack {
-                HeaderView(selectedTab: $selectedTab, titleText: NSLocalizedString("Welcome", comment: "greeting"))
-                Spacer()
-                Button(NSLocalizedString("History", comment: "view user activity")) {
-                    showHistory.toggle()
-                }
-                .sheet(isPresented: $showHistory)  {
-                    HistoryView(showHistory: $showHistory)
-                }
-                    .padding(.bottom)
-            }
-        }
     }
 }
 
-struct WelcomeView_Previews: PreviewProvider {
+struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
-        WelcomeView(selectedTab: .constant(9))
+        TimerView(timerDone: .constant(false))
+            .previewLayout(.sizeThatFits)
     }
 }

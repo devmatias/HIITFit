@@ -30,53 +30,34 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-struct WelcomeView: View {
-    @State private var showHistory = false
-    @Binding var selectedTab: Int
-    var body: some View {
-        ZStack {
-            VStack {
-                HStack(alignment: .bottom) {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("Get Fit", comment: "invitation to exercise"))
-                            .font(.largeTitle)
-                        Text("with high intensity interval training")
-                            .font(.headline)
-                    }
-                    Image("step-up")
-                        .resizedToFill(width: 240, height: 240)
-                        .clipShape(Circle())
-                }
-                Button(action: { selectedTab = 0 }) {
-                    Text(NSLocalizedString("Get Started", comment: "invitation"))
-                    Image(systemName: "arrow.right.circle")
-                }
-                .font(.title2)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 2)
-                    )
-            }
-            VStack {
-                HeaderView(selectedTab: $selectedTab, titleText: NSLocalizedString("Welcome", comment: "greeting"))
-                Spacer()
-                Button(NSLocalizedString("History", comment: "view user activity")) {
-                    showHistory.toggle()
-                }
-                .sheet(isPresented: $showHistory)  {
-                    HistoryView(showHistory: $showHistory)
-                }
-                    .padding(.bottom)
-            }
+struct ExerciseDay: Identifiable {
+    let id = UUID()
+    let date: Date
+    var exercises: [String] = []
+}
+
+class HistoryStore: ObservableObject {
+    @Published var exerciseDays: [ExerciseDay] = []
+
+    init() {
+        #if DEBUG
+        createDevData()
+        #endif
+    }
+
+    func addDoneExercise(_ exerciseName: String) {
+        let today = Date()
+        if today.isSameDay(as: exerciseDays[0].date) {
+            print("Adding \(exerciseName)")
+            exerciseDays[0].exercises.append(exerciseName)
+        } else {
+            exerciseDays.insert(
+                ExerciseDay(date: today, exercises: [exerciseName]),
+                at: 0)
         }
     }
 }
 
-struct WelcomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        WelcomeView(selectedTab: .constant(9))
-    }
-}
+

@@ -32,51 +32,68 @@
 
 import SwiftUI
 
-struct WelcomeView: View {
-    @State private var showHistory = false
-    @Binding var selectedTab: Int
-    var body: some View {
-        ZStack {
-            VStack {
-                HStack(alignment: .bottom) {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("Get Fit", comment: "invitation to exercise"))
-                            .font(.largeTitle)
-                        Text("with high intensity interval training")
-                            .font(.headline)
-                    }
-                    Image("step-up")
-                        .resizedToFill(width: 240, height: 240)
-                        .clipShape(Circle())
-                }
-                Button(action: { selectedTab = 0 }) {
-                    Text(NSLocalizedString("Get Started", comment: "invitation"))
-                    Image(systemName: "arrow.right.circle")
-                }
-                .font(.title2)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 2)
-                    )
-            }
-            VStack {
-                HeaderView(selectedTab: $selectedTab, titleText: NSLocalizedString("Welcome", comment: "greeting"))
-                Spacer()
-                Button(NSLocalizedString("History", comment: "view user activity")) {
-                    showHistory.toggle()
-                }
-                .sheet(isPresented: $showHistory)  {
-                    HistoryView(showHistory: $showHistory)
-                }
-                    .padding(.bottom)
-            }
+struct RatingView: View {
+    let exerciseIndex: Int
+    @AppStorage("ratings") private var ratings = ""
+    @State private var rating = 0
+    let maximumRating = 5
+
+    let onColor = Color.red
+    let offColor = Color.gray
+    func updateRating(index: Int) {
+        rating = index
+        let index = ratings.index(
+            ratings.startIndex,
+            offsetBy: exerciseIndex)
+        ratings.replaceSubrange(index...index, with: String(rating))
+    }
+
+    init(exerciseIndex: Int) {
+        self.exerciseIndex = exerciseIndex
+        let desiredLength = Exercise.exercises.count
+        if ratings.count < desiredLength {
+            ratings = ratings.padding(
+                toLength: desiredLength,
+                withPad: "0",
+                startingAt: 0)
         }
     }
+
+    fileprivate func convertRating() {
+        let index = ratings.index(
+            ratings.startIndex,
+            offsetBy: exerciseIndex)
+        let character = ratings[index]
+        rating = character.wholeNumberValue ?? 0
+    }
+
+    var body: some View {
+        HStack {
+            ForEach(1 ..< maximumRating + 1) { index in
+                Image(systemName: "waveform.path.ecg")
+                    .foregroundColor(index > rating ? offColor : onColor)
+                    .onTapGesture {
+                        updateRating(index: index)
+                    }
+                    .onAppear {
+                        convertRating()
+                    }
+                    .onChange(of: ratings) { _ in
+                        convertRating()
+                    }
+
+            }
+        }
+        .font(.largeTitle)
+    }
+
 }
 
-struct WelcomeView_Previews: PreviewProvider {
+struct RatingView_Previews: PreviewProvider {
+    @AppStorage("ratings") static var ratings: String?
     static var previews: some View {
-        WelcomeView(selectedTab: .constant(9))
+        ratings = nil
+       return  RatingView(exerciseIndex: 0)
+            .previewLayout(.sizeThatFits)
     }
 }

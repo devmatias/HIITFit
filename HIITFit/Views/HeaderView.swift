@@ -33,16 +33,20 @@
 import SwiftUI
 
 struct HeaderView: View {
-    let exerciseName: String
+    @Binding var selectedTab: Int
+    let titleText: String
     var body: some View {
         VStack {
-            Text(exerciseName)
+            Text(titleText)
                 .font(/*@START_MENU_TOKEN@*/.largeTitle/*@END_MENU_TOKEN@*/)
             HStack {
-                Image(systemName: "1.circle")
-                Image(systemName: "2.circle")
-                Image(systemName: "3.circle")
-                Image(systemName: "4.circle")
+                ForEach(0 ..< Exercise.exercises.count) { index in
+                    let fill = index == selectedTab ? ".fill" : ""
+                    Image(systemName: "\(index + 1).circle\(fill)")
+                        .onTapGesture {
+                            selectedTab = index
+                        }
+                }
             }
             .font(.title2)
         }
@@ -52,9 +56,9 @@ struct HeaderView: View {
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            HeaderView(exerciseName: "Squat")
+            HeaderView(selectedTab: .constant(0), titleText: "Squat")
                 .previewLayout(.sizeThatFits)
-            HeaderView(exerciseName: "Squat")
+            HeaderView(selectedTab: .constant(1), titleText: "Step Up")
                 .preferredColorScheme(.dark)
                 .environment(\.sizeCategory, .accessibilityLarge)
                 .previewLayout(.sizeThatFits)

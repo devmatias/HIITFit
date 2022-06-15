@@ -30,53 +30,46 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-struct WelcomeView: View {
-    @State private var showHistory = false
-    @Binding var selectedTab: Int
-    var body: some View {
-        ZStack {
-            VStack {
-                HStack(alignment: .bottom) {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("Get Fit", comment: "invitation to exercise"))
-                            .font(.largeTitle)
-                        Text("with high intensity interval training")
-                            .font(.headline)
-                    }
-                    Image("step-up")
-                        .resizedToFill(width: 240, height: 240)
-                        .clipShape(Circle())
-                }
-                Button(action: { selectedTab = 0 }) {
-                    Text(NSLocalizedString("Get Started", comment: "invitation"))
-                    Image(systemName: "arrow.right.circle")
-                }
-                .font(.title2)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 2)
-                    )
-            }
-            VStack {
-                HeaderView(selectedTab: $selectedTab, titleText: NSLocalizedString("Welcome", comment: "greeting"))
-                Spacer()
-                Button(NSLocalizedString("History", comment: "view user activity")) {
-                    showHistory.toggle()
-                }
-                .sheet(isPresented: $showHistory)  {
-                    HistoryView(showHistory: $showHistory)
-                }
-                    .padding(.bottom)
+struct Exercise {
+    let exerciseName: String
+    let videoName: String
+
+    enum ExerciseEnum: CustomStringConvertible {
+        case squat
+        case stepUp
+        case burpee
+        case sunSalute
+
+        var description: String {
+            switch self {
+            case .squat:
+                return NSLocalizedString("Squat", comment: "exercise")
+            case .stepUp:
+                return NSLocalizedString("Step Up", comment: "exercise")
+            case .burpee:
+                return NSLocalizedString("Burpee", comment: "exercise")
+            case .sunSalute:
+                return NSLocalizedString("Sun Salute", comment: "yoda stretch")
             }
         }
     }
 }
 
-struct WelcomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        WelcomeView(selectedTab: .constant(9))
-    }
+extension Exercise {
+    static let exercises = [
+        Exercise(
+            exerciseName: String(describing: ExerciseEnum.squat),
+            videoName: "squat"),
+        Exercise(
+            exerciseName: String(describing: ExerciseEnum.stepUp),
+            videoName: "step-up"),
+        Exercise(
+            exerciseName: String(describing: ExerciseEnum.burpee),
+            videoName: "burpee"),
+        Exercise(
+            exerciseName: String(describing: ExerciseEnum.sunSalute),
+            videoName: "sun-salute")
+    ]
 }

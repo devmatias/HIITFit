@@ -33,19 +33,28 @@
 import SwiftUI
 
 struct ContentView: View {
+@SceneStorage("selectedTab") private var selectedTab = 9
+
     var body: some View {
-        TabView  {
-            WelcomeView()
-            ForEach(0 ..< 4) { index in
-                ExerciseView(index: index)
+        TabView(selection: $selectedTab)  {
+            WelcomeView(selectedTab: $selectedTab) // 1
+                .tag(9) // 2
+            ForEach(0 ..< Exercise.exercises.count) { index in
+                ExerciseView(selectedTab: $selectedTab, index: index)
+                    .tag(index) //3
             }
             Text("Exercise 2")
         }
+        .environmentObject(HistoryStore())
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
 
         .padding()
     }
+    
+    
 }
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

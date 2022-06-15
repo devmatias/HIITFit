@@ -30,53 +30,25 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import SwiftUI
+import Foundation
 
-struct WelcomeView: View {
-    @State private var showHistory = false
-    @Binding var selectedTab: Int
-    var body: some View {
-        ZStack {
-            VStack {
-                HStack(alignment: .bottom) {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("Get Fit", comment: "invitation to exercise"))
-                            .font(.largeTitle)
-                        Text("with high intensity interval training")
-                            .font(.headline)
-                    }
-                    Image("step-up")
-                        .resizedToFill(width: 240, height: 240)
-                        .clipShape(Circle())
-                }
-                Button(action: { selectedTab = 0 }) {
-                    Text(NSLocalizedString("Get Started", comment: "invitation"))
-                    Image(systemName: "arrow.right.circle")
-                }
-                .font(.title2)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 2)
-                    )
-            }
-            VStack {
-                HeaderView(selectedTab: $selectedTab, titleText: NSLocalizedString("Welcome", comment: "greeting"))
-                Spacer()
-                Button(NSLocalizedString("History", comment: "view user activity")) {
-                    showHistory.toggle()
-                }
-                .sheet(isPresented: $showHistory)  {
-                    HistoryView(showHistory: $showHistory)
-                }
-                    .padding(.bottom)
-            }
-        }
-    }
-}
-
-struct WelcomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        WelcomeView(selectedTab: .constant(9))
+extension HistoryStore {
+    func createDevData() {
+        // Delevepment data
+        exerciseDays = [
+            ExerciseDay(
+                date: Date().addingTimeInterval(-86400),
+                exercises: [
+                    Exercise.exercises[0].exerciseName,
+                    Exercise.exercises[1].exerciseName,
+                    Exercise.exercises[2].exerciseName,
+                ]),
+            ExerciseDay(
+                date: Date().addingTimeInterval(-86400 * 2),
+                exercises: [
+                    Exercise.exercises[1].exerciseName,
+                    Exercise.exercises[0].exerciseName
+                ])
+        ]
     }
 }
