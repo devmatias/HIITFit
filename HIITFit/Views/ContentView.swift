@@ -45,7 +45,6 @@ struct ContentView: View {
             }
             Text("Exercise 2")
         }
-        .environmentObject(HistoryStore())
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
 
         .padding()
