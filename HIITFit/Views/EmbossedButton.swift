@@ -32,49 +32,68 @@
 
 import SwiftUI
 
-struct HeaderView: View {
-    @Binding var selectedTab: Int
-    let titleText: String
-    var body: some View {
-        VStack(spacing: 10) {
-            Text(titleText)
-                .font(/*@START_MENU_TOKEN@*/.largeTitle/*@END_MENU_TOKEN@*/)
-                .fontWeight(.heavy)
-            HStack {
-                ForEach(0 ..< Exercise.exercises.count) { index in
-                    let fill = index == selectedTab ? 0.3 : 0.0
-//                    Image(systemName: "circle\(fill)")
-                    ZStack {
-                        Circle()
-                            .frame(width: 20, height: 20)
-                            .opacity(fill)
-                        Circle()
-                            .frame(width: 10, height: 10)
-                            .opacity(1.0)
-                            .onTapGesture {
-                                selectedTab = index
-                            }
+enum EmbossedButtonShape {
+    case round, capsule
+}
 
-                    }
-
+struct EmbossedButtonStyle: ButtonStyle {
+    var buttonShape = EmbossedButtonShape.capsule
+    func makeBody(configuration: Configuration) -> some View {
+        let shadow = Color("drop-shadow")
+        let highlight = Color("drop-highlight")
+        return configuration.label
+            .padding(10)
+            .background(
+                GeometryReader { geometry in
+                    shape(size: geometry.size)
+                        .foregroundColor(Color("background"))
+                        .shadow(color: shadow, radius: 1, x: 2, y: 2)
+                        .shadow(color: highlight, radius: 1, x: -2, y: -2)
+                        .offset(x: -1, y: -1)
                 }
-            }
-            .font(.title2)
+            )
+    }
+
+    @ViewBuilder
+    func shape(size: CGSize) -> some View {
+        switch buttonShape {
+        case .round:
+            Circle()
+                .stroke(Color("background"), lineWidth: 2 )
+                .frame(
+                    width: max(size.width, size.height),
+                    height: max(size.width, size.height))
+                .offset(x: -1)
+                .offset(y: -max(size.width, size.height) / 2 + min(size.width, size.height / 2))
+        case .capsule:
+            Capsule()
+                .stroke(Color("background"), lineWidth: 2 )
         }
-        .foregroundColor(.white)
     }
 }
 
-struct HeaderView_Previews: PreviewProvider {
+struct EmbossedButton_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            HeaderView(selectedTab: .constant(0), titleText: "Squat")
-                .previewLayout(.sizeThatFits)
-                .background(Color.gray)
-            HeaderView(selectedTab: .constant(1), titleText: "Step Up")
-                .preferredColorScheme(.dark)
-                .environment(\.sizeCategory, .accessibilityLarge)
-                .previewLayout(.sizeThatFits)
+            Button(
+                action: {},
+                label:  {
+                    Text("History")
+                        .fontWeight(.bold)
+                })
+            .buttonStyle(EmbossedButtonStyle(buttonShape: .round))
+            .padding(40)
+        .previewLayout(.sizeThatFits)
+            Button(
+                action: {},
+                label:  {
+                    Text("History")
+                        .fontWeight(.bold)
+                })
+            .preferredColorScheme(.dark)
+            .buttonStyle(EmbossedButtonStyle())
+            .padding(40)
+            .previewLayout(.sizeThatFits)
         }
     }
 }

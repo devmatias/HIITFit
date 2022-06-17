@@ -66,6 +66,7 @@ struct HIITFitApp: App {
         Email support:
         support@xyz.com
         """) )
+
             }
     }
   }
